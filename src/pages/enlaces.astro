@@ -1,0 +1,37 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Copy from '../components/Copy.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import enlaces from '../content/enlaces.json';
+
+const groups = [...new Set(enlaces.map((item) => item.group))];
+---
+
+<BaseLayout title="Enlaces" description="Directorio de fuentes públicas: CNMV, Banco de España, AEAT, INE, ESMA, MiCA y BIS.">
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Enlaces' }]} />
+    <header class="page-intro">
+      <p class="kicker">Directorio</p>
+      <h1>Enlaces</h1>
+      <p class="lead"><Copy id="pages.linksLead" block /></p>
+    </header>
+    {
+      groups.map((group) => (
+        <section class="section">
+          <h2>{group}</h2>
+          <div class="list">
+            {enlaces
+              .filter((item) => item.group === group)
+              .map((item) => (
+                <article class="row-link">
+                  <ExternalLink href={item.url}>{item.title}</ExternalLink>
+                  <p class="fine">{item.note}</p>
+                </article>
+              ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

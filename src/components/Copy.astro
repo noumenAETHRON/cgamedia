@@ -1,0 +1,22 @@
+---
+import { ui } from '../i18n/es.ts';
+import { lookupCopy, audiences } from '../i18n/types.ts';
+
+interface Props {
+  id: string;
+  block?: boolean;
+}
+
+const { id, block = false } = Astro.props;
+const copy = lookupCopy(ui, id);
+---
+
+<span class:list={['copy', block && 'copy-block']}>
+  {
+    audiences.map((mode) => (
+      <span data-for={mode} class="copy-variant">
+        {copy[mode]}
+      </span>
+    ))
+  }
+</span>

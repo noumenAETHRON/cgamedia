@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Copy from '../../components/Copy.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const sorted = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const items = await Promise.all(
+  sorted.map(async (item) => {
+    const { Content } = await render(item);
+    return { item, Content };
+  }),
+);
+const date = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+const topics = [...new Set(items.map(({ item }) => item.data.topic))];
+---
+
+<BaseLayout
+  title="Noticias"
+  description="Selección manual de fuentes y notas. Sin rastreador: cada ficha es un archivo del sitio."
+>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Noticias' }]} />
+    <header class="page-intro">
+      <p class="kicker">Sin scraper</p>
+      <h1>Noticias</h1>
+      <p class="lead"><Copy id="pages.newsLead" block /></p>
+      <p class="meta">Temas en este archivo: {topics.join(' · ')}</p>
+    </header>
+    <div class="list">
+      {
+        items.map(({ item, Content }) => (
+          <article class="card" id={item.id}>
+            <p class="meta">
+              <span class="pill">{item.data.topic}</span> Curado el {date.format(item.data.pubDate)}
+            </p>
+            <h2 style="font-size:1.8rem">{item.data.title}</h2>
+            <div class="prose">
+              <Content />
+            </div>
+            <p>
+              <ExternalLink href={item.data.url}>Fuente: {item.data.source}</ExternalLink>
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

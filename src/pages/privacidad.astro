@@ -1,0 +1,63 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { links, site } from '../config/site.ts';
+---
+
+<BaseLayout title="Privacidad" description="Privacidad de CGA Media: sin rastreadores por defecto, preferencia de lectura en el navegador.">
+  <article class="wrap prose">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Privacidad' }]} />
+    <header class="page-intro">
+      <p class="kicker">Plantilla</p>
+      <h1>Privacidad</h1>
+    </header>
+    <p>
+      Esta página describe lo que hace {site.url.replace('https://', '')} hoy. Es una plantilla honesta, no un dictamen.
+      El correo de contacto es <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+    <h2>Qué no hay</h2>
+    <ul>
+      <li>No hay cuenta de usuario ni base de datos de visitantes.</li>
+      <li>No hay cookies de analítica ni píxeles publicitarios cargados por defecto.</li>
+      <li>Las calculadoras, los juegos y el modo de lectura no envían tus cifras a un servidor de CGA.</li>
+    </ul>
+    <h2>Preferencia de lectura</h2>
+    <p>
+      El modo (Niños, Estudiantes, Padres, Abuelos o Todos) se guarda en <code>localStorage</code> con la clave
+      <code>cga-audience</code>, en tu navegador. Sirve para recordar la letra y el lenguaje. No es un identificador que
+      CGA reciba. Puedes borrarlo en los datos del sitio.
+    </p>
+    <h2>Vídeo y audio</h2>
+    <p>
+      YouTube y Spotify no se cargan hasta que pulsas el botón. A partir de ese momento, sus servidores pueden recibir
+      tu IP y usar cookies según sus políticas. Usamos el dominio <code>youtube-nocookie.com</code> para el vídeo.
+    </p>
+    <h2>Correo y formulario</h2>
+    <p>
+      Si escribes a {site.email}, el mensaje lo recibe el titular en su bandeja. Si en la configuración hay un endpoint
+      de Formspree, el formulario del Estudio lo envía allí y se aplica la política de ese proveedor.
+      {links.formspreeEndpoint ? ' Ahora mismo hay un endpoint configurado.' : ' Ahora mismo no hay endpoint: el botón abre un correo.'}
+    </p>
+    <h2>Newsletter</h2>
+    <p>
+      CGA Brief vive en Substack. Esta web no guarda tu dirección. Si te apuntas, lo haces en su sitio y con su política.
+    </p>
+    <h2>Analítica opcional</h2>
+    <p>
+      Cloudflare Web Analytics puede activarse con un token en <code>src/config/site.ts</code>. Vacío significa que el
+      beacon no se imprime. Ese producto está pensado para no usar cookies; aun así, no se carga hasta que el token exista.
+      Hoy el token está {links.cloudflareWebAnalyticsToken ? 'puesto' : 'vacío'}.
+    </p>
+    <h2>Encargos</h2>
+    <p>
+      Los datos que envíes para un vídeo (nombre, correo, descripción del encargo) se usan para contestar y, si hay
+      acuerdo, para hacer el trabajo. No los pidas ni los mandes si son de patrimonio, claves o cuentas.
+    </p>
+    <h2>Derechos</h2>
+    <p>
+      Si en algún momento hay datos personales en el correo del titular, puedes pedir acceso, rectificación o supresión
+      escribiendo a {site.email}. Esta plantilla no sustituye el registro de actividades ni la información que exigiría
+      un tratamiento más amplio: si el proyecto crece (newsletter propia, pagos, socios con datos), hay que reescribirla.
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,37 @@
+---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Disclaimer from '../../../components/Disclaimer.astro';
+import LabTool from '../../../components/boards/LabTool.astro';
+import LabLayout from '../../../layouts/LabLayout.astro';
+import { labTools } from '../../../config/lab-tools.ts';
+
+export function getStaticPaths() {
+  return labTools.map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
+}
+
+const { tool } = Astro.props;
+---
+
+<LabLayout title={tool.name} description={tool.summary}>
+  <div class="wrap">
+    <Breadcrumbs
+      items={[
+        { name: 'Inicio', href: '/' },
+        { name: 'Laboratorio', href: '/laboratorio/' },
+        { name: 'Herramientas', href: '/laboratorio/herramientas/' },
+        { name: tool.name },
+      ]}
+    />
+    <header class="page-intro">
+      <p class="lab-index">{tool.kicker}</p>
+      <h1>{tool.name}</h1>
+      <p class="lead">{tool.summary}</p>
+      <div class="formula">
+        <p><code>{tool.formula}</code></p>
+        <p class="fine">{tool.formulaNote}</p>
+      </div>
+    </header>
+    <LabTool slug={tool.slug} />
+    <Disclaimer />
+  </div>
+</LabLayout>

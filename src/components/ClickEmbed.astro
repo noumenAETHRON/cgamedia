@@ -1,0 +1,43 @@
+---
+interface Props {
+  src: string | null;
+  title: string;
+  kind: 'video' | 'audio';
+  external: string | null;
+}
+
+const { src, title, kind, external } = Astro.props;
+---
+
+{
+  src ? (
+    <div class="embed-shell" data-embed={src} data-title={title}>
+      <div>
+        <p class="kicker">{kind === 'video' ? 'YouTube' : 'Spotify'}</p>
+        <button type="button" class="button button-gold">
+          {kind === 'video' ? 'Cargar el vídeo de YouTube' : 'Cargar el audio de Spotify'}
+        </button>
+        <p class="fine">Hasta que pulses, no llamamos a {kind === 'video' ? 'YouTube' : 'Spotify'}. Al cargar el reproductor, ellos pueden usar cookies.</p>
+        {external && (
+          <p>
+            <a href={external} target="_blank" rel="noopener noreferrer">
+              Abrir en su web <span class="sr-only">(se abre en una pestaña nueva)</span>
+            </a>
+          </p>
+        )}
+      </div>
+    </div>
+  ) : (
+    <div class="embed-shell">
+      <div>
+        <p class="kicker">Pendiente</p>
+        <p class="serif" style="font-size:1.8rem;margin:0.2rem 0">El episodio se publicará aquí</p>
+        <p class="fine">Falta el identificador real. Está marcado como TODO en la configuración.</p>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  import '../scripts/embeds.ts';
+</script>

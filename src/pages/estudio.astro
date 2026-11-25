@@ -1,0 +1,106 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Copy from '../components/Copy.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { links, site } from '../config/site.ts';
+
+const services = [
+  {
+    title: 'Vídeo con IA',
+    text: 'Piezas de explicación, episodios y cortes para redes. La IA propone; una persona revisa el guion, la voz y los datos antes de publicar.',
+  },
+  {
+    title: 'Anuncios',
+    text: 'Spots cortos para marcas. El estudio no produce piezas que prometan rentabilidades ni que disfracen un producto financiero de clase.',
+  },
+  {
+    title: 'Corporativo',
+    text: 'Retrato de compañía, entrevistas y formación interna. El encargo es de producción, con un responsable al otro lado.',
+  },
+  {
+    title: 'Media inmobiliario',
+    text: 'Recorridos y piezas para una promoción o una cartera. Se cuenta el inmueble. No se vende una rentabilidad.',
+  },
+];
+const endpoint = links.formspreeEndpoint;
+---
+
+<BaseLayout
+  title="Estudio"
+  description="CGA Media Studio: vídeo con IA, anuncios, corporativo y media inmobiliario. Producción, no asesoramiento financiero."
+>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Estudio' }]} />
+    <header class="page-intro">
+      <p class="kicker">CGA Media Studio</p>
+      <h1>Estudio</h1>
+      <p class="lead"><Copy id="pages.studioLead" block /></p>
+    </header>
+    <div class="grid-2">
+      {
+        services.map((service) => (
+          <article class="card">
+            <h2 style="font-size:1.7rem">{service.title}</h2>
+            <p>{service.text}</p>
+          </article>
+        ))
+      }
+    </div>
+    <section class="section">
+      <h2>Escribir</h2>
+      <p>El correo visible es <a href={`mailto:${site.email}`}>{site.email}</a>. Si no hay un formulario externo configurado, el botón abre tu programa de correo.</p>
+      <form
+        class="card"
+        method="post"
+        action={endpoint || undefined}
+        data-mailto={endpoint ? undefined : site.email}
+      >
+        <label class="field">
+          <span>Nombre</span>
+          <input name="nombre" required autocomplete="name" />
+        </label>
+        <label class="field">
+          <span>Correo</span>
+          <input name="email" type="email" required autocomplete="email" />
+        </label>
+        <label class="field">
+          <span>Servicio</span>
+          <select name="servicio">
+            <option>Vídeo con IA</option>
+            <option>Anuncios</option>
+            <option>Corporativo</option>
+            <option>Media inmobiliario</option>
+            <option>Otra producción</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Qué necesitas</span>
+          <textarea name="mensaje" required></textarea>
+        </label>
+        <label class="choice">
+          <input type="checkbox" name="produccion" required />
+          <span>Entiendo que esto es un encargo de producción, no una petición de asesoramiento financiero.</span>
+        </label>
+        <p class="fine">No añadas datos de cuentas, claves ni patrimonios. No hacen falta para un encargo de vídeo.</p>
+        <button class="button button-gold" type="submit">{endpoint ? 'Enviar' : 'Abrir el correo'}</button>
+      </form>
+    </section>
+    <Disclaimer />
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('form[data-mailto]');
+  form?.addEventListener('submit', (event) => {
+    const email = form.dataset.mailto;
+    if (!email) return;
+    event.preventDefault();
+    const data = new FormData(form);
+    const subject = encodeURIComponent(`Estudio CGA: ${data.get('servicio') ?? 'contacto'}`);
+    const body = encodeURIComponent(
+      `Nombre: ${data.get('nombre') ?? ''}\nCorreo: ${data.get('email') ?? ''}\nServicio: ${data.get('servicio') ?? ''}\n\n${data.get('mensaje') ?? ''}`,
+    );
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  });
+</script>

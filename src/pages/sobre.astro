@@ -1,0 +1,51 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Copy from '../components/Copy.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { founder, site } from '../config/site.ts';
+import { personNode, organizationNode, graph } from '../lib/seo.ts';
+---
+
+<BaseLayout
+  title="Sobre"
+  description="Carlos Gómez Artiles, fundador único de CGA. Español, escribe desde Bangkok. Educación financiera, no asesoramiento."
+  jsonLd={[graph([personNode(), organizationNode()])]}
+>
+  <article class="wrap prose">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Sobre' }]} />
+    <header class="page-intro">
+      <p class="kicker">Fundador único</p>
+      <h1>Carlos Gómez Artiles</h1>
+      <p class="lead"><Copy id="pages.aboutLead" block /></p>
+    </header>
+    <p class="banner"><strong>{founder.credential}</strong></p>
+    <p>
+      CGA Media es su casa editorial: episodios, herramientas, juegos y el Laboratorio. Escribe en español desde Bangkok
+      para quien quiera aprender dinero sin que le vendan un atajo.
+    </p>
+    <p>
+      Es el único fundador. No hay otro socio fundador detrás del nombre. El estudio, cuando acepta un encargo, produce
+      media. No gestiona patrimonios y no está autorizado por la CNMV para prestar servicios de inversión.
+    </p>
+    <h2>Qué es esta web</h2>
+    <ul>
+      <li>Un archivo público de educación financiera, en español, preparado para poder tener inglés más adelante.</li>
+      <li>Cinco modos de lectura. El Laboratorio no es uno de ellos: es otra sala, y no se simplifica.</li>
+      <li>Calculadoras y juegos que viven en el navegador.</li>
+    </ul>
+    <h2>Qué no es</h2>
+    <ul>
+      <li>Una firma de asesoramiento, una gestoría o un family office que tome tu mandato.</li>
+      <li>Un canal de señales, de bots llave en mano o de tokens que colocar.</li>
+      <li>La situación fiscal de Carlos. Vive en Bangkok. Eso no dice nada de la tuya.</li>
+    </ul>
+    <p>
+      Correo: <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+    <p>
+      <a href="/laboratorio/">Laboratorio</a> · <a href="/estudio/">Estudio</a> · <a href="/episodios/">Episodios</a>
+    </p>
+    <Disclaimer />
+  </article>
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Copy from '../../components/Copy.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const items = (await getCollection('workflows')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Workflows" description="Cómo trabaja CGA: estudio con IA, pruebas en paper, modelo 721 y herramientas de nómada.">
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Workflows' }]} />
+    <header class="page-intro">
+      <p class="kicker">Método</p>
+      <h1>Workflows</h1>
+      <p class="lead"><Copy id="pages.workflowsLead" block /></p>
+    </header>
+    <div class="list">
+      {
+        items.map((item) => (
+          <a class="row-link" href={`/workflows/${item.id}/`}>
+            <span class="meta">0{item.data.order}</span>
+            <strong>{item.data.title}</strong>
+            <AudienceText texts={item.data.summary} block />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Copy from '../../components/Copy.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../config/site.ts';
+import { absolute } from '../../lib/urls.ts';
+import { founder } from '../../config/site.ts';
+
+const episodes = (await getCollection('episodes'))
+  .filter((entry) => entry.data.draft !== true)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const date = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+
+const series = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: site.seriesName,
+  description: 'Episodios de educación financiera de CGA Media.',
+  url: absolute('/episodios/'),
+  inLanguage: 'es',
+  webFeed: absolute('/rss.xml'),
+  author: { '@type': 'Person', name: founder.name, url: absolute('/sobre/') },
+  publisher: { '@type': 'Organization', name: site.name, url: `${site.url}/` },
+};
+---
+
+<BaseLayout title="Episodios" description="Archivo de Hablemos de dinero: episodios, notas y hueco de transcripción." jsonLd={[series]}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Episodios' }]} />
+    <header class="page-intro">
+      <p class="kicker">{site.seriesName}</p>
+      <h1>Episodios</h1>
+      <p class="lead"><Copy id="pages.episodesLead" block /></p>
+    </header>
+    <div class="list">
+      {
+        episodes.map((episode) => (
+          <a class="row-link" href={`/episodios/${episode.id}/`}>
+            <span class="meta">
+              T{episode.data.season} · E{episode.data.episode} · {episode.data.duration} · {date.format(episode.data.pubDate)}
+            </span>
+            <strong>{episode.data.title}</strong>
+            <AudienceText texts={episode.data.summary} block />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,37 @@
+---
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import PublicTool from '../../components/boards/PublicTool.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tools } from '../../config/tools.ts';
+
+export function getStaticPaths() {
+  return tools.map((tool) => ({ params: { slug: tool.slug }, props: { tool } }));
+}
+
+const { tool } = Astro.props;
+---
+
+<BaseLayout title={tool.name.todos} description={tool.summary.todos}>
+  <div class="wrap">
+    <Breadcrumbs
+      items={[
+        { name: 'Inicio', href: '/' },
+        { name: 'Herramientas', href: '/herramientas/' },
+        { name: tool.name.todos },
+      ]}
+    />
+    <header class="page-intro">
+      <p class="kicker">Herramienta</p>
+      <h1><AudienceText texts={tool.name} /></h1>
+      <p class="lead"><AudienceText texts={tool.summary} block /></p>
+      <div class="formula">
+        <p><code>{tool.formula}</code></p>
+        <p class="fine">{tool.formulaNote}</p>
+      </div>
+    </header>
+    <PublicTool slug={tool.slug} />
+    <Disclaimer />
+  </div>
+</BaseLayout>

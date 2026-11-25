@@ -1,0 +1,29 @@
+---
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Copy from '../../components/Copy.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { games } from '../../config/games-meta.ts';
+---
+
+<BaseLayout title="Juegos" description="Tres juegos de navegador para aprender ahorro, necesidades y interés compuesto.">
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Juegos' }]} />
+    <header class="page-intro">
+      <p class="kicker">Un rato corto</p>
+      <h1>Juegos</h1>
+      <p class="lead"><Copy id="pages.gamesLead" block /></p>
+    </header>
+    <div class="grid-3">
+      {
+        games.map((game) => (
+          <article class="card">
+            <h2 style="font-size:1.7rem"><AudienceText texts={game.title} /></h2>
+            <p><AudienceText texts={game.summary} block /></p>
+            <a class="button button-gold" href={`/juegos/${game.slug}/`}>Jugar</a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

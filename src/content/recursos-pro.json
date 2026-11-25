@@ -1,0 +1,86 @@
+[
+  {
+    "group": "Mercados tokenizados",
+    "title": "BIS Bulletin 107. Tokenisation of government bonds",
+    "url": "https://www.bis.org/publications/bulletin-107-tokenisation-government-bonds-assessment-and-roadmap",
+    "note": "10 de julio de 2025. Muestra pequeña, bid-ask y el mapa de diseño. Cita el dato con fecha.",
+    "caveat": ""
+  },
+  {
+    "group": "Mercados tokenizados",
+    "title": "Hyun Song Shin — Tokenisation for the real world",
+    "url": "https://www.bis.org/speeches/20240208-tokenisation-real-world.pdf",
+    "note": "Discurso en el simposio de la OCC, 8 de febrero de 2024. Tokenizar no es descentralizar.",
+    "caveat": ""
+  },
+  {
+    "group": "Mercados tokenizados",
+    "title": "CPMI e BIS — Tokenisation in the context of money and other assets",
+    "url": "https://www.bis.org/publications/tokenisation-context-money-and-other-assets-concepts-and-implications-central-banks.pdf",
+    "note": "Informe de octubre de 2024. Definición de trabajo: representación digital en una plataforma programable.",
+    "caveat": ""
+  },
+  {
+    "group": "Norma y supervisor",
+    "title": "MiCA en EUR-Lex",
+    "url": "https://eur-lex.europa.eu/eli/reg/2023/1114/oj",
+    "note": "El reglamento. El envoltorio jurídico del token decide el régimen: no todo lo tokenizado es un criptoactivo MiCA.",
+    "caveat": ""
+  },
+  {
+    "group": "Norma y supervisor",
+    "title": "ESMA, mercados de criptoactivos",
+    "url": "https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica",
+    "note": "Fichas técnicas, advertencias y el trabajo de nivel 2.",
+    "caveat": ""
+  },
+  {
+    "group": "Norma y supervisor",
+    "title": "CNMV",
+    "url": "https://www.cnmv.es/",
+    "note": "Antes de leer a un emisor, mira si la CNMV tiene algo que decir de esa actividad.",
+    "caveat": ""
+  },
+  {
+    "group": "Impuestos",
+    "title": "BOE — Orden HFP/886/2023, modelo 721",
+    "url": "https://www.boe.es/buscar/doc.php?id=BOE-A-2023-17429",
+    "note": "La orden que aprueba el modelo. Declaración informativa, no el pago del impuesto.",
+    "caveat": ""
+  },
+  {
+    "group": "Impuestos",
+    "title": "AEAT — preguntas frecuentes del 721",
+    "url": "https://sede.agenciatributaria.gob.es/Sede/todas-gestiones/impuestos-tasas/declaraciones-informativas/modelo-721-decla-sobre-monedas-extranjero/preguntas-frecuentes-sobre-modelo-721/plazo-presentacion-modelo-721.html",
+    "note": "1 de enero a 31 de marzo, y cuándo hay que volver a presentarlo.",
+    "caveat": "Los umbrales y los supuestos raros (recompra, extinción, custodia compartida) se leen en la sede, no de memoria."
+  },
+  {
+    "group": "Impuestos",
+    "title": "Sede de la Agencia Tributaria",
+    "url": "https://sede.agenciatributaria.gob.es/",
+    "note": "Para el IRPF y el resto de modelos. Este sitio no reproduce tablas de tipos.",
+    "caveat": ""
+  },
+  {
+    "group": "Privacidad y custodia",
+    "title": "getmonero.org",
+    "url": "https://www.getmonero.org/",
+    "note": "Sitio del proyecto Monero. Sirve para leer qué dice de sí mismo.",
+    "caveat": "No es un respaldo, no es una guía de compra y no suspende ninguna obligación fiscal."
+  },
+  {
+    "group": "Privacidad y custodia",
+    "title": "Banco de España",
+    "url": "https://www.bde.es/",
+    "note": "Contexto de pagos, entidades y lo que un banco central considera dinero. Útil para no llamar depósito a un token.",
+    "caveat": ""
+  },
+  {
+    "group": "Método",
+    "title": "INE — portal",
+    "url": "https://www.ine.es/",
+    "note": "Si hablas de inflación en una política de inversión, cita la serie, no un recuerdo.",
+    "caveat": ""
+  }
+]

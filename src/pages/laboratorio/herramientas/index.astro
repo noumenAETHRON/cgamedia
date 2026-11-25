@@ -1,0 +1,39 @@
+---
+import LabLayout from '../../../layouts/LabLayout.astro';
+import { labTools } from '../../../config/lab-tools.ts';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+---
+
+<LabLayout
+  title="Herramientas del Laboratorio"
+  description="Tamaño de posición, volatilidad y drawdown, DCA frente a lump sum, y rendimiento tokenizado. Modelos locales."
+>
+  <div class="wrap">
+    <Breadcrumbs
+      items={[
+        { name: 'Inicio', href: '/' },
+        { name: 'Laboratorio', href: '/laboratorio/' },
+        { name: 'Herramientas' },
+      ]}
+    />
+    <header class="page-intro">
+      <p class="lab-index">Herramientas</p>
+      <h1>Cuentas de mesa</h1>
+      <p class="lead">
+        Cuatro modelos. Ninguno envía datos. Ninguno es una orden de comprar, vender, tokenizar o presentar un impuesto.
+      </p>
+    </header>
+    <div class="dense-list">
+      {
+        labTools.map((tool, index) => (
+          <a href={`/laboratorio/herramientas/${tool.slug}/`}>
+            <span class="dense-num">{String(index + 1).padStart(2, '0')}</span>
+            <span class="dense-title">{tool.name}</span>
+            <span class="dense-meta">{tool.kicker}</span>
+            <p class="dense-desc">{tool.summary}</p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</LabLayout>

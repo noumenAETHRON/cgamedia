@@ -1,0 +1,187 @@
+---
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+{
+  slug === 'tamano-posicion' && (
+    <form class="calc-layout" data-lab-calc="position">
+      <div>
+        <label class="field">
+          <span>Equity</span>
+          <input name="equity" type="number" min="0" step="0.01" value="10000" />
+        </label>
+        <label class="field">
+          <span>Riesgo por operación, %</span>
+          <input name="risk" type="number" min="0.01" max="100" step="0.05" value="1" />
+        </label>
+        <fieldset>
+          <legend>Lado</legend>
+          <label class="choice"><input type="radio" name="side" value="long" checked /> Largo</label>
+          <label class="choice"><input type="radio" name="side" value="short" /> Corto</label>
+        </fieldset>
+        <label class="field">
+          <span>Entrada</span>
+          <input name="entry" type="number" min="0" step="0.0001" value="100" />
+        </label>
+        <label class="field">
+          <span>Stop</span>
+          <input name="stop" type="number" min="0" step="0.0001" value="95" />
+        </label>
+        <label class="field">
+          <span>Objetivo (opcional)</span>
+          <input name="target" type="number" min="0" step="0.0001" value="110" />
+        </label>
+        <label class="field">
+          <span>Acierto supuesto, % (opcional, para la esperanza)</span>
+          <input name="win" type="number" min="0" max="100" step="0.1" value="40" />
+        </label>
+      </div>
+      <div>
+        <p class="result-error" data-error role="alert"></p>
+        <div class="results" data-results aria-live="polite"></div>
+      </div>
+    </form>
+  )
+}
+
+{
+  slug === 'volatilidad-drawdown' && (
+    <form data-lab-calc="vol">
+      <fieldset>
+        <legend>Método</legend>
+        <label class="choice"><input type="radio" name="method" value="history" checked /> Serie de rentabilidades</label>
+        <label class="choice"><input type="radio" name="method" value="model" /> Pesos, volatilidad y una correlación</label>
+      </fieldset>
+      <div data-panel="history">
+        <label class="field">
+          <span>Periodicidad de la serie</span>
+          <select name="freq">
+            <option value="12" selected>Mensual</option>
+            <option value="1">Anual</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Rentabilidades en %, separadas por espacios</span>
+          <textarea name="series">2.1 -1.4 0.8 3.2 -4.5 1.1 0.4 -2.2 1.8 2.5 -0.6 1.3</textarea>
+        </label>
+        <label class="field">
+          <span>Tipo sin riesgo anual, %</span>
+          <input name="rf" type="number" step="0.1" value="2" />
+        </label>
+      </div>
+      <div data-panel="model" hidden>
+        <p class="fine">Deja vacía una fila si no la usas. Los pesos usados tienen que sumar 100.</p>
+        <div class="asset-grid">
+          <strong>Activo</strong><strong>Peso %</strong><strong>Vol. anual %</strong>
+          <span>1</span><input name="w1" type="number" step="0.1" value="60" /><input name="v1" type="number" step="0.1" value="15" />
+          <span>2</span><input name="w2" type="number" step="0.1" value="40" /><input name="v2" type="number" step="0.1" value="8" />
+          <span>3</span><input name="w3" type="number" step="0.1" value="" /><input name="v3" type="number" step="0.1" value="" />
+          <span>4</span><input name="w4" type="number" step="0.1" value="" /><input name="v4" type="number" step="0.1" value="" />
+        </div>
+        <label class="field">
+          <span>Correlación media entre pares (−1 a 1)</span>
+          <input name="corr" type="number" min="-1" max="1" step="0.05" value="0.3" />
+        </label>
+      </div>
+      <p class="result-error" data-error role="alert"></p>
+      <div class="results" data-results aria-live="polite"></div>
+    </form>
+  )
+}
+
+{
+  slug === 'dca-vs-lump-sum' && (
+    <form class="calc-layout" data-lab-calc="dca">
+      <div>
+        <label class="field">
+          <span>Capital total</span>
+          <input name="total" type="number" min="0" step="0.01" value="12000" />
+        </label>
+        <label class="field">
+          <span>Meses</span>
+          <input name="months" type="number" min="1" max="600" step="1" value="12" />
+        </label>
+        <label class="field">
+          <span>Tipo anual del escenario, %</span>
+          <input name="rate" type="number" step="0.1" value="6" />
+        </label>
+        <label class="field">
+          <span>Golpe del primer mes, %</span>
+          <input name="drop" type="number" min="0" max="99" step="0.5" value="10" />
+          <small>0 para un camino sin susto. El golpe sustituye al tipo de ese mes.</small>
+        </label>
+      </div>
+      <div>
+        <p class="result-error" data-error role="alert"></p>
+        <div class="results" data-results aria-live="polite"></div>
+      </div>
+    </form>
+  )
+}
+
+{
+  slug === 'rendimiento-tokenizado' && (
+    <form class="calc-layout" data-lab-calc="token">
+      <div>
+        <label class="field">
+          <span>Capital</span>
+          <input name="capital" type="number" min="0" step="0.01" value="10000" />
+        </label>
+        <label class="field">
+          <span>Rendimiento bruto anual, %</span>
+          <input name="gross" type="number" step="0.1" value="8" />
+        </label>
+        <label class="field">
+          <span>Fee de plataforma, %</span>
+          <input name="platform" type="number" min="0" step="0.05" value="1" />
+        </label>
+        <label class="field">
+          <span>Fee de protocolo, %</span>
+          <input name="protocol" type="number" min="0" step="0.05" value="0.2" />
+        </label>
+        <label class="field">
+          <span>Custodia o administración, %</span>
+          <input name="custody" type="number" min="0" step="0.05" value="0.3" />
+        </label>
+        <label class="field">
+          <span>Pérdida o impago supuesto, %</span>
+          <input name="loss" type="number" min="0" step="0.05" value="0.5" />
+        </label>
+        <label class="field">
+          <span>Coste de divisa, %</span>
+          <input name="fx" type="number" min="0" step="0.05" value="0" />
+        </label>
+        <label class="field">
+          <span>Años</span>
+          <input name="years" type="number" min="0" max="40" step="1" value="3" />
+        </label>
+        <label class="field">
+          <span>Frecuencia si capitalizas</span>
+          <select name="frequency">
+            <option value="1">Anual</option>
+            <option value="4" selected>Trimestral</option>
+            <option value="12">Mensual</option>
+          </select>
+        </label>
+        <fieldset>
+          <legend>Qué hace el neto</legend>
+          <label class="choice"><input type="radio" name="compound" value="no" checked /> Se reparte</label>
+          <label class="choice"><input type="radio" name="compound" value="yes" /> Se capitaliza</label>
+        </fieldset>
+      </div>
+      <div>
+        <p class="result-error" data-error role="alert"></p>
+        <div class="results" data-results aria-live="polite"></div>
+      </div>
+    </form>
+  )
+}
+
+<p class="fine">Cifras locales. Ningún campo sale del navegador. Educación, no una orden de operar.</p>
+
+<script>
+  import '../../scripts/lab-calculators.ts';
+</script>

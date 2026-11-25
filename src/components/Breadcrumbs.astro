@@ -1,0 +1,29 @@
+---
+import JsonLd from './JsonLd.astro';
+import { breadcrumbNode } from '../lib/seo.ts';
+
+interface Item {
+  name: string;
+  href?: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Miga de pan">
+  <ol class="crumbs">
+    {
+      items.map((item, index) => (
+        <li>
+          {index > 0 && <span aria-hidden="true"> / </span>}
+          {item.href && index < items.length - 1 ? <a href={item.href}>{item.name}</a> : <span>{item.name}</span>}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+<JsonLd data={breadcrumbNode(items)} />

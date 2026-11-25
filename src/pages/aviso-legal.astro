@@ -1,0 +1,58 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { founder, legalTodos, site } from '../config/site.ts';
+---
+
+<BaseLayout title="Aviso legal" description="Aviso legal de CGA Media. Plantilla con datos pendientes de completar.">
+  <article class="wrap prose">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Aviso legal' }]} />
+    <header class="page-intro">
+      <p class="kicker">Plantilla</p>
+      <h1>Aviso legal</h1>
+    </header>
+    <div class="banner">
+      <p>Antes de tratar esta página como definitiva, completa en <code>src/config/site.ts</code>:</p>
+      <ul>
+        {legalTodos.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    <h2>Titular</h2>
+    <p>
+      Este sitio, {site.url.replace('https://', '')}, lo publica {founder.name}, fundador único de CGA, como persona.
+      No se indica aquí una sociedad porque no consta en esta plantilla. Correo: <a href={`mailto:${site.email}`}>{site.email}</a>.
+      Escribe desde Bangkok. El domicilio a efectos legales está pendiente (ver la lista de arriba) y no debe inventarse.
+    </p>
+    <h2>Objeto</h2>
+    <p>
+      CGA Media es un sitio de educación financiera y, en la sección Estudio, un punto de contacto para encargos de
+      producción audiovisual. No es un medio de comunicación registrado en un boletín oficial por el mero hecho de
+      existir, ni una empresa de servicios de inversión.
+    </p>
+    <h2>Contenido</h2>
+    <Disclaimer />
+    <p>
+      Los cálculos son supuestos que introduce quien visita. Los juegos simplifican a propósito. Las cifras de terceros
+      (por ejemplo un boletín del BIS) pertenecen a su fuente y envejecen. Las normas, sobre todo las tributarias, se
+      comprueban en la sede de la Agencia Tributaria y en el BOE.
+    </p>
+    <h2>Propiedad intelectual</h2>
+    <p>
+      Los textos, la marca verbal CGA Media y el diseño de este sitio corresponden a su titular, salvo las marcas y los
+      textos de terceros enlazados. Puedes citar un fragmento corto con enlace. No copies el sitio entero ni presentes
+      el material como asesoramiento propio.
+    </p>
+    <h2>Enlaces</h2>
+    <p>
+      Los enlaces salientes se eligen a mano. Un enlace no es una recomendación de contratación. Los de afiliado, si
+      algún día hay socios de verdad, se marcan en <a href="/socios/">Socios</a> con <code>rel="sponsored nofollow"</code>
+      y un aviso visible. Las fichas de ejemplo no son acuerdos.
+    </p>
+    <h2>Responsabilidad</h2>
+    <p>
+      El titular procura no publicar datos falsos. No responde de decisiones que alguien tome por haber leído una página
+      educativa, ni del contenido de sitios de terceros, ni de un identificador de vídeo todavía marcado como pendiente.
+    </p>
+  </article>
+</BaseLayout>

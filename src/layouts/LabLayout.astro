@@ -1,0 +1,17 @@
+---
+import '../styles/lab.css';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: 'website' | 'article';
+  jsonLd?: unknown[];
+}
+
+const { title, description, ogType = 'website', jsonLd = [] } = Astro.props;
+---
+
+<BaseLayout zone="lab" title={title} description={description} ogType={ogType} jsonLd={jsonLd}>
+  <slot />
+</BaseLayout>

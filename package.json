@@ -1,0 +1,28 @@
+{
+  "name": "cgamedia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CGA Media: educación financiera en español. Sitio estático para cgamedia.cc.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1 --port 4477",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview --host 127.0.0.1 --port 4477",
+    "test": "node --experimental-strip-types --test src/lib/finance.test.ts src/lib/games.test.ts",
+    "check:content": "node scripts/check-content.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource/fraunces": "^5.2.9",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.7",
+    "@fontsource/outfit": "^5.2.8",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
