@@ -181,7 +181,7 @@ Si `npm run build` termina sin error, `dist/` es el sitio. En GitHub, el workflo
    - añade `www.cgamedia.cc`
 9. Cloudflare crea los registros DNS, porque la zona ya es suya. Espera a que los dos digan *Active*.
 
-El archivo `public/_redirects` pide que `www` vaya a la raíz sin www. Si el producto es Workers y esa redirección no salta sola entre dominios, hazla a mano (paso C).
+Workers no acepta en `_redirects` un origen con dominio (`https://www…`). `www.cgamedia.cc` se redirige a la raíz sin www con una regla de Cloudflare (paso C).
 
 ### B. Cloudflare Workers, con Wrangler
 
