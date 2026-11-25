@@ -1,0 +1,15 @@
+---
+import { jsonLd } from '../lib/seo.ts';
+
+interface Props {
+  data: unknown;
+}
+
+const { data } = Astro.props;
+const payload =
+  data && typeof data === 'object' && !Array.isArray(data) && !('@context' in data)
+    ? { '@context': 'https://schema.org', ...data }
+    : data;
+---
+
+<script type="application/ld+json" set:html={jsonLd(payload)} />

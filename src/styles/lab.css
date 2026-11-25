@@ -1,0 +1,186 @@
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+html[data-zone='lab'] {
+  --sans: 'IBM Plex Sans', 'Outfit', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --bg: #080a0e;
+  --bg-2: #10141c;
+  --bg-3: #171d28;
+  --gold: #d7b56a;
+  --gold-2: #f0ddb0;
+  --muted: #aeb6c6;
+  --line: rgba(215, 181, 106, 0.34);
+  --measure: 72ch;
+}
+
+html[data-zone='lab'] body {
+  background: #080a0e;
+  font-size: 0.98rem;
+  line-height: 1.58;
+}
+
+html[data-audience='abuelos'][data-zone='lab'] body {
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+html[data-zone='lab'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(215, 181, 106, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 181, 106, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 72%);
+}
+
+html[data-zone='lab'] #starfield {
+  opacity: 0.4;
+}
+
+html[data-zone='lab'] .formula {
+  display: block;
+}
+
+html[data-audience='abuelos'][data-zone='lab'] body::before {
+  display: none;
+}
+
+.lab-hero {
+  display: grid;
+  gap: 1rem;
+  padding: 1.6rem 0 0.4rem;
+}
+
+.lab-index {
+  margin: 0;
+  font-family: var(--mono);
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+}
+
+.lab-hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  max-width: 14ch;
+}
+
+.dense-list {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.dense-list a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.8rem 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+}
+
+.dense-list a:hover .dense-title {
+  color: var(--gold-2);
+}
+
+.dense-num,
+.dense-meta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.dense-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.dense-desc {
+  grid-column: 2;
+  margin: 0;
+  color: var(--muted);
+}
+
+.lab-article {
+  display: grid;
+  gap: 1.4rem;
+  padding-bottom: 2rem;
+}
+
+.lab-aside {
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--line);
+  padding: 0.35rem 0;
+  font-family: var(--mono);
+  font-size: 0.86rem;
+}
+
+.tier-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.tier {
+  border: 1px solid var(--line);
+  padding: 1rem;
+  background: rgba(8, 10, 14, 0.8);
+}
+
+.tier h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  margin: 0.2rem 0;
+}
+
+@media (min-width: 800px) {
+  .tier-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1000px) {
+  .lab-article {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    align-items: start;
+  }
+
+  .lab-aside {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .dense-list a {
+    grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 719px) {
+  .dense-list a {
+    grid-template-columns: auto 1fr;
+  }
+
+  .dense-meta {
+    grid-column: 2;
+  }
+}

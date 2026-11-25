@@ -1,0 +1,78 @@
+---
+import { getCollection, render } from 'astro:content';
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ClickEmbed from '../../components/ClickEmbed.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import RelatedTools from '../../components/RelatedTools.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { founder, media, site, type MediaKey } from '../../config/site.ts';
+import { absolute, spotifyEmbed, spotifyEpisode, youtubeEmbed, youtubeWatch } from '../../lib/urls.ts';
+
+export async function getStaticPaths() {
+  const episodes = await getCollection('episodes');
+  return episodes
+    .filter((episode) => episode.data.draft !== true)
+    .map((episode) => ({ params: { slug: episode.id }, props: { episode } }));
+}
+
+const { episode } = Astro.props;
+const { Content } = await render(episode);
+const key = episode.data.mediaKey as MediaKey;
+const ids = key in media ? media[key] : undefined;
+const video = youtubeEmbed(ids?.youtubeId);
+const audio = spotifyEmbed(ids?.spotifyId);
+const date = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+const url = absolute(`/episodios/${episode.id}/`);
+
+const episodeLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  name: episode.data.title,
+  description: episode.data.description,
+  datePublished: episode.data.pubDate.toISOString(),
+  url,
+  inLanguage: 'es',
+  duration: episode.data.duration,
+  author: { '@type': 'Person', name: founder.name },
+  partOfSeries: {
+    '@type': 'PodcastSeries',
+    name: site.seriesName,
+    url: absolute('/episodios/'),
+  },
+};
+
+if (video && ids) {
+  episodeLd.associatedMedia = {
+    '@type': 'VideoObject',
+    name: episode.data.title,
+    description: episode.data.description,
+    embedUrl: video,
+    uploadDate: episode.data.pubDate.toISOString(),
+  };
+}
+---
+
+<BaseLayout title={episode.data.title} description={episode.data.description} ogType="article" jsonLd={[episodeLd]}>
+  <article class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Episodios', href: '/episodios/' }, { name: episode.data.title }]} />
+    <header class="page-intro">
+      <p class="kicker">
+        T{episode.data.season} · E{episode.data.episode} · {episode.data.duration} · {date.format(episode.data.pubDate)}
+      </p>
+      <h1>{episode.data.title}</h1>
+      <p class="lead"><AudienceText texts={episode.data.summary} block /></p>
+      <p class="only-ninos banner">La idea corta está arriba. Debajo, las notas de mayores.</p>
+    </header>
+    <div class="grid-2">
+      <ClickEmbed kind="video" title={episode.data.title} src={video} external={youtubeWatch(ids?.youtubeId)} />
+      <ClickEmbed kind="audio" title={episode.data.title} src={audio} external={spotifyEpisode(ids?.spotifyId)} />
+    </div>
+    <div class="prose">
+      <Content />
+    </div>
+    <RelatedTools slugs={episode.data.tools} />
+    <p><a href="/episodios/">Todos los episodios</a></p>
+    <Disclaimer />
+  </article>
+</BaseLayout>

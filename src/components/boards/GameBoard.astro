@@ -1,0 +1,113 @@
+---
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+{
+  slug === 'mision-ahorro' && (
+    <div class="game-layout" data-game="mission">
+      <div>
+        <p class="meta">
+          Mes <span data-month>1 de 6</span> · Combustible <span data-fuel>0 / 24</span>
+        </p>
+        <div class="track" aria-hidden="true">
+          <svg class="rocket" data-rocket viewBox="0 0 28 28">
+            <path d="M14 2 l6 14 h-4 l2 8 -8-6 2-4 h-4 z" fill="#e4c37a"></path>
+          </svg>
+        </div>
+        <p data-message class="lead"></p>
+        <button type="button" class="button" data-again hidden>
+          Otra misión
+        </button>
+      </div>
+      <div data-choices>
+        <p>Cada mes entran 10 monedas. La comida y el aire se llevan 4. ¿Qué haces con las otras 6?</p>
+        <div class="button-row">
+          <button type="button" class="button button-gold" data-choice="save">
+            Guardar las 6
+          </button>
+          <button type="button" class="button" data-choice="half">
+            Guardar 3 y un capricho
+          </button>
+          <button type="button" class="button" data-choice="spend">
+            Gastar las 6
+          </button>
+        </div>
+        <p class="fine">También puedes usar el tabulador y Enter. Hacen falta 24 para llegar al planeta. Guardarlo todo suma 36.</p>
+      </div>
+    </div>
+  )
+}
+
+{
+  slug === 'necesidades-deseos' && (
+    <div data-game="sort">
+      <p class="meta" data-progress>Tarjeta 1 de 8</p>
+      <p class="score" data-label></p>
+      <p data-why class="lead"></p>
+      <p class="meta">
+        Aciertos: <span data-score>0 / 8</span>
+      </p>
+      <div class="button-row" data-actions>
+        <button type="button" class="button button-gold" data-kind="need">
+          Lo necesito
+        </button>
+        <button type="button" class="button" data-kind="want">
+          Lo deseo
+        </button>
+      </div>
+      <button type="button" class="button" data-again hidden>
+        Otra ronda
+      </button>
+      <p class="fine">Teclas: tabula hasta el botón y pulsa Enter. No hay que arrastrar.</p>
+    </div>
+  )
+}
+
+{
+  slug === 'planeta-compuesto' && (
+    <div data-game="planet">
+      <div class="calc-layout">
+        <div>
+          <label class="field">
+            <span>Años: <span data-year-label>10</span></span>
+            <input data-years type="range" min="0" max="30" value="10" />
+          </label>
+          <label class="field">
+            <span>Crecimiento de ejemplo al año</span>
+            <select data-rate>
+              <option value="0.02">2%</option>
+              <option value="0.05">5%</option>
+              <option value="0.1" selected>10%</option>
+            </select>
+            <small>Empiezas con 100 monedas. El porcentaje es un ejemplo, no un interés que alguien te deba.</small>
+          </label>
+        </div>
+        <div class="planet-pair">
+          <div>
+            <div class="planet" data-kept-planet></div>
+            <p class="kicker">Si lo dejas</p>
+            <p class="score" data-kept>0</p>
+          </div>
+          <div>
+            <div class="planet" style="--s:0.2; filter:grayscale(0.4)"></div>
+            <p class="kicker">Si te lo gastas</p>
+            <p class="score" data-spent>0</p>
+          </div>
+        </div>
+      </div>
+      <p class="fine">Si te lo gastas hoy, no queda planeta que crezca. El de la izquierda solo cambia de tamaño: no es dinero de verdad.</p>
+      <div class="table-wrap year-table">
+        <table class="data">
+          <tbody data-table></tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  import '../../scripts/games-ui.ts';
+</script>

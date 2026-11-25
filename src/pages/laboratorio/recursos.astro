@@ -1,0 +1,50 @@
+---
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import LabLayout from '../../layouts/LabLayout.astro';
+import recursos from '../../content/recursos-pro.json';
+
+const groups = [...new Set(recursos.map((item) => item.group))];
+---
+
+<LabLayout
+  title="Fuentes del Laboratorio"
+  description="Lecturas primarias para el Laboratorio: BIS, MiCA, ESMA, CNMV, modelo 721 y el sitio del proyecto Monero, con sus salvedades."
+>
+  <div class="wrap">
+    <Breadcrumbs
+      items={[
+        { name: 'Inicio', href: '/' },
+        { name: 'Laboratorio', href: '/laboratorio/' },
+        { name: 'Fuentes' },
+      ]}
+    />
+    <header class="page-intro">
+      <p class="lab-index">Fuentes</p>
+      <h1>Lecturas de mesa</h1>
+      <p class="lead">
+        Primero el documento, después el comentario. Si una ficha lleva salvedad, la salvedad forma parte de la ficha.
+      </p>
+    </header>
+    {
+      groups.map((group) => (
+        <section class="section">
+          <h2>{group}</h2>
+          <div class="list">
+            {recursos
+              .filter((item) => item.group === group)
+              .map((item) => (
+                <article class="tier">
+                  <ExternalLink href={item.url}>{item.title}</ExternalLink>
+                  <p>{item.note}</p>
+                  {item.caveat && <p class="fine">{item.caveat}</p>}
+                </article>
+              ))}
+          </div>
+        </section>
+      ))
+    }
+    <Disclaimer />
+  </div>
+</LabLayout>

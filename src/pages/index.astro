@@ -1,0 +1,144 @@
+---
+import { getCollection } from 'astro:content';
+import AudienceText from '../components/AudienceText.astro';
+import ClickEmbed from '../components/ClickEmbed.astro';
+import Copy from '../components/Copy.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import HeroArt from '../components/HeroArt.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { community, links, media, site } from '../config/site.ts';
+import { games } from '../config/games-meta.ts';
+import { getTool } from '../config/tools.ts';
+import { graph, organizationNode, websiteNode } from '../lib/seo.ts';
+import { spotifyEmbed, youtubeEmbed } from '../lib/urls.ts';
+
+const episodes = (await getCollection('episodes'))
+  .filter((entry) => entry.data.draft !== true)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latest = episodes[0];
+const latestMedia = latest ? media[latest.data.mediaKey as keyof typeof media] : undefined;
+const news = (await getCollection('news')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+const tool = getTool('interes-compuesto');
+const game = games[0];
+
+const date = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+---
+
+<BaseLayout home title="Hablemos de dinero" description={site.description} jsonLd={[graph([organizationNode(), websiteNode()])]}>
+  <section class="wrap hero">
+    <div>
+      <p class="kicker"><Copy id="hero.kicker" /></p>
+      <h1>Hablemos de <em>dinero</em></h1>
+      <p class="lead"><Copy id="hero.lead" block /></p>
+      <div class="button-row">
+        <a class="button button-gold" href={latest ? `/episodios/${latest.id}/` : '/episodios/'}><Copy id="hero.watch" /></a>
+        <ExternalLink class="button" href={community.free.href}><Copy id="hero.skool" /></ExternalLink>
+        <ExternalLink class="button" href={links.substack}><Copy id="hero.brief" /></ExternalLink>
+      </div>
+      <p class="hero-note">Despacho CGA es la comunidad gratuita. El precio de las salas de pago, si entras, está en Skool: esta web no cobra.</p>
+    </div>
+    <HeroArt />
+  </section>
+
+  {
+    latest && latestMedia && (
+      <section class="wrap section">
+        <div class="section-head">
+          <div>
+            <p class="kicker"><Copy id="home.latestKicker" /></p>
+            <h2><Copy id="home.latestTitle" /></h2>
+          </div>
+          <a href={`/episodios/${latest.id}/`}>Ficha del episodio</a>
+        </div>
+        <article class="card">
+          <p class="meta">
+            T{latest.data.season} · E{latest.data.episode} · {latest.data.duration} · {date.format(latest.data.pubDate)}
+          </p>
+          <h3>{latest.data.title}</h3>
+          <p><AudienceText texts={latest.data.summary} block /></p>
+          <div class="grid-2">
+            <ClickEmbed
+              kind="video"
+              title={latest.data.title}
+              src={youtubeEmbed(latestMedia.youtubeId)}
+              external={null}
+            />
+            <ClickEmbed
+              kind="audio"
+              title={latest.data.title}
+              src={spotifyEmbed(latestMedia.spotifyId)}
+              external={null}
+            />
+          </div>
+        </article>
+      </section>
+    )
+  }
+
+  <section class="wrap section">
+    <div class="section-head">
+      <div>
+        <p class="kicker"><Copy id="home.pathsKicker" /></p>
+        <h2><Copy id="home.pathsTitle" /></h2>
+      </div>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <p class="kicker">01</p>
+        <h3><Copy id="home.pathToolsTitle" /></h3>
+        <p><Copy id="home.pathToolsBody" block /></p>
+        {tool && <p class="meta"><AudienceText texts={tool.name} /></p>}
+        <a class="more" href="/herramientas/">Entrar</a>
+      </article>
+      <article class="card">
+        <p class="kicker">02</p>
+        <h3><Copy id="home.pathGamesTitle" /></h3>
+        <p><Copy id="home.pathGamesBody" block /></p>
+        {game && <p class="meta"><AudienceText texts={game.title} /></p>}
+        <a class="more" href="/juegos/">Jugar</a>
+      </article>
+      <article class="card">
+        <p class="kicker">03 · Pro</p>
+        <h3><Copy id="home.pathLabTitle" /></h3>
+        <p><Copy id="home.pathLabBody" block /></p>
+        <a class="more" href="/laboratorio/">Abrir el Laboratorio</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="section-head">
+      <div>
+        <p class="kicker"><Copy id="home.newsKicker" /></p>
+        <h2><Copy id="home.newsTitle" /></h2>
+      </div>
+      <a href="/noticias/">Ver todas</a>
+    </div>
+    <div class="list">
+      {
+        news.map((item) => (
+          <a class="row-link" href={`/noticias/#${item.id}`}>
+            <span class="pill">{item.data.topic}</span>
+            <strong>{item.data.title}</strong>
+            <span class="meta">{item.data.source} · {date.format(item.data.pubDate)}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap section grid-2">
+    <article class="card">
+      <p class="kicker"><Copy id="home.studioKicker" /></p>
+      <h2><Copy id="home.studioTitle" /></h2>
+      <p><Copy id="home.studioBody" block /></p>
+      <a class="button button-gold" href="/estudio/"><Copy id="home.studioCta" /></a>
+    </article>
+    <article class="card">
+      <p class="kicker"><Copy id="home.briefKicker" /></p>
+      <h2><Copy id="home.briefTitle" /></h2>
+      <p><Copy id="home.briefBody" block /></p>
+      <ExternalLink class="button" href={links.substack}>CGA Brief</ExternalLink>
+    </article>
+  </section>
+</BaseLayout>

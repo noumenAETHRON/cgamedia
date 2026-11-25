@@ -1,0 +1,95 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { links, site } from '../config/site.ts';
+import { absolute } from '../lib/urls.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  home?: boolean;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  zone?: 'public' | 'lab';
+  jsonLd?: unknown[];
+}
+
+const {
+  title,
+  description,
+  home = false,
+  ogType = 'website',
+  noindex = false,
+  zone = 'public',
+  jsonLd = [],
+} = Astro.props;
+
+const fullTitle = home ? 'CGA Media · Hablemos de dinero' : `${title} · CGA Media`;
+const canonical = absolute(Astro.url.pathname || '/');
+const image = absolute('/og.png');
+const analytics = links.cloudflareWebAnalyticsToken;
+---
+
+<!doctype html>
+<html lang="es" data-zone={zone}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline src="/scripts/audience-boot.js"></script>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <!-- hreflang="en": añadir cuando exista la versión inglesa. Ver src/i18n/en.ts. -->
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
+    <meta name="author" content="Carlos Gómez Artiles" />
+    <meta name="theme-color" content="#070b16" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CGA Media. Hablemos de dinero." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="Episodios de CGA Media" href={absolute('/rss.xml')} />
+    {jsonLd.map((node) => <JsonLd data={node} />)}
+    {
+      analytics && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${analytics}"}`}
+        />
+      )
+    }
+  </head>
+  <body>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <Header />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+    <noscript>
+      <p class="noscript">
+        Sin JavaScript se puede leer todo. Las calculadoras, los juegos y el cambio de modo de lectura necesitan JavaScript, y siguen siendo locales.
+      </p>
+    </noscript>
+    <script>
+      import '../scripts/starfield.ts';
+    </script>
+  </body>
+</html>

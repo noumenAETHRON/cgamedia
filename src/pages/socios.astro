@@ -1,0 +1,63 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Copy from '../components/Copy.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { partners } from '../config/site.ts';
+
+const live = partners.filter((partner) => !partner.example);
+const examples = partners.filter((partner) => partner.example);
+---
+
+<BaseLayout
+  title="Socios"
+  description="Socios y afiliados de CGA Media. Hoy no hay acuerdos publicados: las fichas de ejemplo muestran el aviso."
+>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Socios' }]} />
+    <header class="page-intro">
+      <p class="kicker">Acuerdos</p>
+      <h1>Socios</h1>
+      <p class="lead"><Copy id="pages.partnersLead" block /></p>
+    </header>
+    {
+      live.length === 0 ? (
+        <p class="banner">No hay socios ni afiliados publicados. Cuando haya un acuerdo con una casa seria, la ficha saldrá de <code>src/config/site.ts</code> y el enlace de afiliado llevará <code>rel="sponsored nofollow"</code> y el aviso al lado.</p>
+      ) : (
+        <div class="grid-2">
+          {live.map((partner) => (
+            <article class="card">
+              <p class="pill">{partner.category}</p>
+              <h2 style="font-size:1.7rem">{partner.name}</h2>
+              <p>{partner.blurb}</p>
+              <ExternalLink href={partner.href} affiliate={partner.affiliate} sponsored={!partner.affiliate}>
+                Visitar
+              </ExternalLink>
+            </article>
+          ))}
+        </div>
+      )
+    }
+    <section class="section">
+      <h2>Así se verá una ficha</h2>
+      <p class="fine">Estas tres no son socios. Existen para que el formato y el aviso no se estrenen el día del primer acuerdo.</p>
+      <div class="grid-3">
+        {
+          examples.map((partner) => (
+            <article class="card">
+              <p class="pill">Ejemplo · no es un socio</p>
+              <p class="meta">{partner.category}</p>
+              <h3>{partner.name}</h3>
+              <p>{partner.blurb}</p>
+              <ExternalLink href={partner.href} affiliate={partner.affiliate} sponsored={!partner.affiliate}>
+                Enlace de la ficha
+              </ExternalLink>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+    <Disclaimer />
+  </div>
+</BaseLayout>

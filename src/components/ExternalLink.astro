@@ -1,0 +1,25 @@
+---
+import { ui } from '../i18n/es.ts';
+
+interface Props {
+  href: string;
+  affiliate?: boolean;
+  sponsored?: boolean;
+  class?: string;
+}
+
+const { href, affiliate = false, sponsored = false, class: className } = Astro.props;
+const todo = href.includes('TODO');
+const rel = ['noopener', 'noreferrer'];
+if (affiliate) rel.push('sponsored', 'nofollow');
+---
+
+<span class="external">
+  <a class={className} href={href} target="_blank" rel={rel.join(' ')}>
+    <slot />
+    {todo && <span class="todo-pill">TODO</span>}
+    <span class="sr-only"> (se abre en una pestaña nueva)</span>
+  </a>
+  {affiliate && <span class="affiliate-note">{ui.common.affiliate.todos}</span>}
+  {!affiliate && sponsored && <span class="sponsor-note">{ui.common.sponsorNote.todos}</span>}
+</span>

@@ -1,0 +1,70 @@
+---
+import { getCollection, render } from 'astro:content';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import RelatedTools from '../../components/RelatedTools.astro';
+import LabLayout from '../../layouts/LabLayout.astro';
+import { community, founder } from '../../config/site.ts';
+import { absolute } from '../../lib/urls.ts';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('laboratorio');
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const date = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.data.title,
+  description: article.data.description,
+  datePublished: article.data.pubDate.toISOString(),
+  dateModified: (article.data.updated ?? article.data.pubDate).toISOString(),
+  inLanguage: 'es',
+  url: absolute(`/laboratorio/${article.id}/`),
+  author: { '@type': 'Person', name: founder.name, url: absolute('/sobre/') },
+  publisher: { '@type': 'Organization', name: 'CGA Media', url: 'https://cgamedia.cc/' },
+};
+---
+
+<LabLayout title={article.data.title} description={article.data.description} ogType="article" jsonLd={[articleLd]}>
+  <div class="wrap">
+    <Breadcrumbs
+      items={[
+        { name: 'Inicio', href: '/' },
+        { name: 'Laboratorio', href: '/laboratorio/' },
+        { name: article.data.title },
+      ]}
+    />
+    <div class="lab-article">
+      <article>
+        <p class="lab-index">{article.data.kicker} · {article.data.minutes} min · {date.format(article.data.pubDate)}</p>
+        <h1>{article.data.title}</h1>
+        <p class="lead">{article.data.description}</p>
+        <p class="banner">Texto de modo pro. No hay versión reducida de este artículo.</p>
+        <div class="prose">
+          <Content />
+        </div>
+        <RelatedTools slugs={article.data.tools} />
+        <Disclaimer />
+      </article>
+      <aside class="lab-aside">
+        <div class="tier">
+          <p class="lab-index">Temas</p>
+          <p>{article.data.topics.join(' · ')}</p>
+          <div class="stat"><span>Lectura</span><span>{article.data.minutes} min</span></div>
+          <div class="stat"><span>Autor</span><span>C. Gómez Artiles</span></div>
+        </div>
+        <div class="tier">
+          <p class="lab-index">Si sigues</p>
+          <p class="fine">Salas de estudio de pago. No son señales ni gestión.</p>
+          <ExternalLink href={community.despacho.href}>Despacho</ExternalLink>
+          <ExternalLink href={community.mesa.href}>Mesa CGA</ExternalLink>
+        </div>
+      </aside>
+    </div>
+  </div>
+</LabLayout>

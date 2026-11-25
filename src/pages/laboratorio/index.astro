@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import ExternalLink from '../../components/ExternalLink.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import LabLayout from '../../layouts/LabLayout.astro';
+import { community } from '../../config/site.ts';
+import { labTools } from '../../config/lab-tools.ts';
+
+const articles = (await getCollection('laboratorio')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const date = new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium' });
+---
+
+<LabLayout
+  title="Laboratorio"
+  description="Modo pro de CGA Media: tokenización, custodia, trading en paper, family office, modelo 721, fintech y flujos de IA. Sin versión simplificada."
+>
+  <div class="wrap lab-hero">
+    <p class="lab-index">01 — Sala</p>
+    <h1>Laboratorio</h1>
+    <p class="lead">
+      Esta zona no tiene modo niños ni letra fácil de contenido. Si llegas desde Abuelos, la letra sigue grande por
+      accesibilidad; las palabras no bajan de nivel. Aquí se leen mercados tokenizados, custodia, reglas de riesgo,
+      el marco del modelo 721 y el método de trabajo. No hay señales ni mandato.
+    </p>
+    <p class="banner">El Laboratorio no cambia de lenguaje. El modo de lectura solo ajusta la letra y el contraste.</p>
+  </div>
+
+  <section class="wrap section">
+    <p class="lab-index">02 — Artículos</p>
+    <div class="dense-list">
+      {
+        articles.map((article, index) => (
+          <a href={`/laboratorio/${article.id}/`}>
+            <span class="dense-num">{String(index + 1).padStart(2, '0')}</span>
+            <span class="dense-title">{article.data.title}</span>
+            <span class="dense-meta">{article.data.minutes} min</span>
+            <p class="dense-desc">{article.data.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <p class="lab-index">03 — Herramientas</p>
+    <h2>Cuentas de mesa</h2>
+    <div class="grid-2">
+      {
+        labTools.map((tool) => (
+          <a class="row-link" href={`/laboratorio/herramientas/${tool.slug}/`}>
+            <span class="pill">{tool.kicker}</span>
+            <strong>{tool.name}</strong>
+            <span class="fine">{tool.summary}</span>
+          </a>
+        ))
+      }
+    </div>
+    <p><a href="/laboratorio/recursos/">Fuentes primarias del Laboratorio</a></p>
+  </section>
+
+  <section class="wrap section">
+    <p class="lab-index">04 — Salas de pago</p>
+    <h2>Despacho y Mesa CGA</h2>
+    <p>
+      La comunidad gratuita se llama Despacho CGA y está en la portada. Aquí están los dos accesos de pago. El precio
+      no se inventa en esta web: está en Skool.
+    </p>
+    <p class="fine">
+      Despacho y Mesa CGA son salas de estudio. No son un servicio de inversión, no envían señales y no gestionan tu dinero.
+    </p>
+    <div class="tier-grid">
+      <article class="tier">
+        <p class="lab-index">{community.despacho.priceNote}</p>
+        <h3>{community.despacho.label}</h3>
+        <p>{community.despacho.blurb}</p>
+        <ExternalLink class="button button-gold" href={community.despacho.href}>Ver Despacho en Skool</ExternalLink>
+      </article>
+      <article class="tier">
+        <p class="lab-index">{community.mesa.priceNote}</p>
+        <h3>{community.mesa.label}</h3>
+        <p>{community.mesa.blurb}</p>
+        <ExternalLink class="button" href={community.mesa.href}>Ver Mesa CGA en Skool</ExternalLink>
+      </article>
+    </div>
+    <p class="meta">Última ficha del archivo: {articles[0] ? date.format(articles[0].data.pubDate) : '—'}.</p>
+    <Disclaimer />
+  </section>
+</LabLayout>

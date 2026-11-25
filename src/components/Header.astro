@@ -1,0 +1,91 @@
+---
+import Copy from './Copy.astro';
+import { audienceNames } from '../i18n/es.ts';
+import { audiences } from '../i18n/types.ts';
+
+const path = Astro.url.pathname;
+const lab = path.startsWith('/laboratorio');
+
+const primary = [
+  { href: '/', id: 'nav.home', key: 'home' },
+  { href: '/episodios/', id: 'nav.episodes', key: 'episodes' },
+  { href: '/herramientas/', id: 'nav.tools', key: 'tools' },
+  { href: '/juegos/', id: 'nav.games', key: 'games' },
+  { href: '/sobre/', id: 'nav.about', key: 'about' },
+];
+
+const more = [
+  { href: '/noticias/', id: 'nav.news', key: 'news' },
+  { href: '/workflows/', id: 'nav.workflows', key: 'workflows' },
+  { href: '/enlaces/', id: 'nav.links', key: 'links' },
+  { href: '/socios/', id: 'nav.partners', key: 'partners' },
+  { href: '/estudio/', id: 'nav.studio', key: 'studio' },
+];
+
+function current(href: string): boolean {
+  if (href === '/') return path === '/';
+  return path === href || path.startsWith(href);
+}
+---
+
+<header class="site-header">
+  {
+    lab && (
+      <p class="lab-stripe">CGA · Laboratorio · Modo pro · El texto no se simplifica</p>
+    )
+  }
+  <div class="wrap audience-row">
+    <div class="audience-switch" role="radiogroup" aria-label="Cómo quieres leer" id="audience-switch">
+      {
+        audiences.map((mode) => (
+          <button type="button" role="radio" data-audience-set={mode} aria-checked="false">
+            {audienceNames[mode]}
+          </button>
+        ))
+      }
+    </div>
+    <p class="audience-hint"><Copy id="audience.hint" /></p>
+    <p class="sr-only" id="audience-live" aria-live="polite"></p>
+  </div>
+  <div class="wrap bar">
+    <a class="logo" href="/" aria-label="CGA Media, inicio">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="18" cy="18" r="12" fill="none" stroke="#e4c37a" stroke-width="1.2"></circle>
+        <circle cx="18" cy="18" r="4" fill="none" stroke="#f3ddb0" stroke-width="1"></circle>
+        <circle cx="28" cy="14" r="1.7" fill="#e4c37a"></circle>
+      </svg>
+      <span>CGA <em>Media</em></span>
+    </a>
+    <input id="nav-toggle" class="nav-check" type="checkbox" />
+    <label class="nav-button" for="nav-toggle"><Copy id="nav.menu" /></label>
+    <nav class="nav-links" aria-label="Secciones">
+      {
+        primary.slice(0, 4).map((item) => (
+          <a href={item.href} aria-current={current(item.href) ? 'page' : undefined}>
+            <Copy id={item.id} />
+          </a>
+        ))
+      }
+      <a data-nav="lab" class="nav-lab" href="/laboratorio/" aria-current={current('/laboratorio/') ? 'page' : undefined}>
+        <Copy id="nav.lab" />
+      </a>
+      <a href="/sobre/" aria-current={current('/sobre/') ? 'page' : undefined}><Copy id="nav.about" /></a>
+      <details class="nav-more">
+        <summary><Copy id="nav.more" /></summary>
+        <div>
+          {
+            more.map((item) => (
+              <a href={item.href} aria-current={current(item.href) ? 'page' : undefined}>
+                <Copy id={item.id} />
+              </a>
+            ))
+          }
+          <a class="lab-overflow" href="/laboratorio/"><Copy id="nav.lab" /></a>
+        </div>
+      </details>
+    </nav>
+  </div>
+</header>
+<script>
+  import '../scripts/audience.ts';
+</script>

@@ -1,0 +1,28 @@
+---
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Disclaimer from '../../components/Disclaimer.astro';
+import GameBoard from '../../components/boards/GameBoard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { games } from '../../config/games-meta.ts';
+
+export function getStaticPaths() {
+  return games.map((game) => ({ params: { slug: game.slug }, props: { game } }));
+}
+
+const { game } = Astro.props;
+---
+
+<BaseLayout title={game.title.todos} description={game.summary.todos}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Juegos', href: '/juegos/' }, { name: game.title.todos }]} />
+    <header class="page-intro">
+      <p class="kicker">Juego</p>
+      <h1><AudienceText texts={game.title} /></h1>
+      <p class="lead"><AudienceText texts={game.summary} block /></p>
+    </header>
+    <GameBoard slug={game.slug} />
+    <p><a href="/juegos/">Todos los juegos</a></p>
+    <Disclaimer />
+  </div>
+</BaseLayout>

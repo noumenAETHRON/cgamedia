@@ -1,0 +1,40 @@
+---
+import Copy from './Copy.astro';
+import Disclaimer from './Disclaimer.astro';
+import { site } from '../config/site.ts';
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <p class="kicker">CGA Media</p>
+      <p><Copy id="footer.blurb" block /></p>
+    </div>
+    <div>
+      <p class="kicker">Mapa</p>
+      <ul class="footer-links">
+        <li><a href="/episodios/">Episodios</a></li>
+        <li><a href="/herramientas/">Herramientas</a></li>
+        <li><a href="/juegos/">Juegos</a></li>
+        <li><a href="/laboratorio/">Laboratorio</a></li>
+        <li><a href="/estudio/">Estudio</a></li>
+        <li><a href="/sobre/">Sobre</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">Legal</p>
+      <ul class="footer-links">
+        <li><a href="/aviso-legal/">Aviso legal</a></li>
+        <li><a href="/privacidad/">Privacidad</a></li>
+        <li><a href="/socios/">Socios</a></li>
+        <li><a href="/enlaces/">Enlaces</a></li>
+        <li><a href="/rss.xml">RSS</a></li>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:1rem">
+    <Disclaimer />
+    <p class="fine">© {new Date().getFullYear()} <Copy id="footer.rights" /></p>
+  </div>
+</footer>

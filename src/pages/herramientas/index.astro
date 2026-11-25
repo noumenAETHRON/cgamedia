@@ -1,0 +1,32 @@
+---
+import AudienceText from '../../components/AudienceText.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Copy from '../../components/Copy.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tools } from '../../config/tools.ts';
+---
+
+<BaseLayout
+  title="Herramientas"
+  description="Calculadoras de interés, ahorro, emergencia, presupuesto, inflación, deudas y número FIRE. Se calculan en el navegador."
+>
+  <div class="wrap">
+    <Breadcrumbs items={[{ name: 'Inicio', href: '/' }, { name: 'Herramientas' }]} />
+    <header class="page-intro">
+      <p class="kicker">En tu navegador</p>
+      <h1>Herramientas</h1>
+      <p class="lead"><Copy id="pages.toolsLead" block /></p>
+    </header>
+    <div class="list">
+      {
+        tools.map((tool, index) => (
+          <a class="row-link" href={`/herramientas/${tool.slug}/`}>
+            <span class="meta">0{index + 1}</span>
+            <strong><AudienceText texts={tool.name} /></strong>
+            <AudienceText texts={tool.summary} block />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

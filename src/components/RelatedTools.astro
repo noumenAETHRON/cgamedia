@@ -1,0 +1,41 @@
+---
+import AudienceText from './AudienceText.astro';
+import { getGame } from '../config/games-meta.ts';
+import { getLabTool } from '../config/lab-tools.ts';
+import { getTool } from '../config/tools.ts';
+import type { AudienceCopy } from '../i18n/types.ts';
+
+interface Props {
+  slugs: string[];
+}
+
+const items = Astro.props.slugs.flatMap((slug) => {
+  const tool = getTool(slug);
+  if (tool) return [{ href: `/herramientas/${slug}/`, name: tool.name, lab: false as const }];
+  const game = getGame(slug);
+  if (game) return [{ href: `/juegos/${slug}/`, name: game.title, lab: false as const }];
+  const lab = getLabTool(slug);
+  if (lab) return [{ href: `/laboratorio/herramientas/${slug}/`, name: lab.name, lab: true as const }];
+  return [];
+});
+
+function isCopy(name: AudienceCopy | string): name is AudienceCopy {
+  return typeof name !== 'string';
+}
+---
+
+{
+  items.length > 0 && (
+    <section>
+      <h2>Herramientas de esta pieza</h2>
+      <div class="list">
+        {items.map((item) => (
+          <a class="row-link" href={item.href}>
+            {item.lab && <span class="pill">Laboratorio</span>}
+            <strong>{isCopy(item.name) ? <AudienceText texts={item.name} /> : item.name}</strong>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}

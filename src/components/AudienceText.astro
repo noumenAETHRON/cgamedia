@@ -1,0 +1,20 @@
+---
+import { audiences, type AudienceCopy } from '../i18n/types.ts';
+
+interface Props {
+  texts: AudienceCopy;
+  block?: boolean;
+}
+
+const { texts, block = false } = Astro.props;
+---
+
+<span class:list={['copy', block && 'copy-block']}>
+  {
+    audiences.map((mode) => (
+      <span data-for={mode} class="copy-variant">
+        {texts[mode]}
+      </span>
+    ))
+  }
+</span>
