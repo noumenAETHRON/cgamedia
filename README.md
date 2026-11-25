@@ -1,6 +1,10 @@
 # CGA Media
 
-Sitio público de **CGA Media** (`https://cgamedia.cc`): educación financiera en español, con un modo de lectura para cada quien y un Laboratorio que no se simplifica.
+[![CI](https://github.com/noumenAETHRON/cgamedia/actions/workflows/ci.yml/badge.svg)](https://github.com/noumenAETHRON/cgamedia/actions/workflows/ci.yml)
+
+Repositorio público de muestra de **CGA Media** ([cgamedia.cc](https://cgamedia.cc)): el código que hay en [noumenAETHRON/cgamedia](https://github.com/noumenAETHRON/cgamedia), rama `main`, es el que se despliega. Cada push a `main` pasa por GitHub Actions (tests y build) y, una vez conectado el repo en Cloudflare, publica el sitio.
+
+Sitio de educación financiera en español, con un modo de lectura para cada quien y un Laboratorio que no se simplifica.
 
 El dueño es Carlos Gómez Artiles. Español, escribe desde Bangkok. Fundador único de CGA.
 
@@ -146,11 +150,9 @@ Busca `TODO` en ese archivo antes de dar el dominio por cerrado. El aviso legal 
 
 El dominio `cgamedia.cc` ya está en Cloudflare. El sitio es estático: el plan gratuito basta. No hace falta una base de datos ni un servidor de pago.
 
-Hay dos caminos. Los dos sirven la carpeta `dist/`. Empieza por el A si quieres que cada `git push` publique solo.
+El camino normal es importar el repositorio de GitHub. Cada push a `main` vuelve a construir y a publicar. `wrangler.jsonc` ya está listo para Workers Builds: el comando de build es `npm run build` y los archivos salen de `./dist`. Node es la 22 (`.nvmrc` y `engines` en `package.json`).
 
-### 0. Antes de los dos caminos
-
-En tu ordenador:
+### 0. Comprobar en local, una vez
 
 ```bash
 npm install
@@ -158,28 +160,28 @@ npm test
 npm run build
 ```
 
-Si `npm run build` termina sin error, `dist/` es el sitio.
+Si `npm run build` termina sin error, `dist/` es el sitio. En GitHub, el workflow `.github/workflows/ci.yml` hace `npm test` y `npm run build` en cada push.
 
-Node en Cloudflare tiene que ser 22. En Pages se elige en *Settings → Build → Environment variables* o en la versión de Node del proyecto. Este repo pide `>=22` en `package.json`.
-
-### A. Cloudflare Pages, conectado a Git
-
-Es el camino más simple cuando el código vive en GitHub o en el git que ya uses.
+### A. Importar noumenAETHRON/cgamedia
 
 1. Entra en [dash.cloudflare.com](https://dash.cloudflare.com).
-2. *Workers & Pages → Create → Pages → Connect to Git*.
-3. Elige este repositorio y la rama que quieras publicar (normalmente `main`).
-4. Configura la build así:
+2. Menú **Workers & Pages**.
+3. **Create**.
+4. **Import a repository** (conectar GitHub si el panel lo pide, con la cuenta que ve `noumenAETHRON/cgamedia`).
+5. Elige el repositorio **noumenAETHRON/cgamedia** y la rama **main**.
+6. En la configuración del proyecto, deja o escribe:
    - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Root directory:** `/` (la raíz del repo)
-5. Guarda y deja que el primer despliegue acabe en verde.
-6. *Custom domains → Set up a domain*:
+   - **Build output directory:** `dist` (si el formulario es de Pages y pide carpeta de salida)
+   - Si el formulario es de Workers y pide comando de deploy: `npx wrangler deploy` (lee `wrangler.jsonc`, que publica `./dist`)
+   - **Root directory:** `/` (la raíz)
+   - **Node.js:** `22`. Si hay variables de entorno, añade `NODE_VERSION` = `22`.
+7. Guarda y espera a que el primer despliegue acabe en verde.
+8. En el proyecto, **Custom domains** (o **Settings → Domains & Routes → Add → Custom domain**):
    - añade `cgamedia.cc`
    - añade `www.cgamedia.cc`
-7. Cloudflare crea los registros DNS solo, porque la zona ya es suya. Espera a que los dos digan *Active*.
+9. Cloudflare crea los registros DNS, porque la zona ya es suya. Espera a que los dos digan *Active*.
 
-El archivo `public/_redirects` pide que `www` vaya a la raíz sin www. Si Pages no lo aplica entre dominios, haz la redirección a mano (paso C).
+El archivo `public/_redirects` pide que `www` vaya a la raíz sin www. Si el producto es Workers y esa redirección no salta sola entre dominios, hazla a mano (paso C).
 
 ### B. Cloudflare Workers, con Wrangler
 
@@ -200,7 +202,7 @@ npm run build
 npx wrangler deploy
 ```
 
-`wrangler.jsonc` ya dice que los archivos están en `./dist` y que el worker se llama `cgamedia`.
+`wrangler.jsonc` ya dice que el build es `npm run build`, que los archivos están en `./dist` y que el worker se llama `cgamedia`. El despliegue automático del panel (paso A) usa ese mismo archivo; este paso B es solo si publicas desde tu ordenador.
 
 3. En el panel: *Workers & Pages → cgamedia → Settings → Domains & Routes → Add → Custom domain*. Añade `cgamedia.cc` y después `www.cgamedia.cc`.
 

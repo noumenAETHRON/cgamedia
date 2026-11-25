@@ -7,7 +7,7 @@ CGA Media es un sitio estático. Astro lee markdown y TypeScript, y escribe HTML
 - **Astro**, salida `static`. Cada página es HTML. El JavaScript viaja solo donde hay una calculadora, un juego, el cielo de estrellas o el cambio de modo.
 - **Sin Tailwind y sin librería de componentes.** El diseño es CSS propio (`src/styles/global.css` y, solo en el Laboratorio, `src/styles/lab.css`) para poder controlar el contraste y la letra de cada modo.
 - **Fuentes en el propio sitio** (`@fontsource`): Fraunces y Outfit en toda la web; IBM Plex Sans y Mono solo en el Laboratorio. No hay llamada a Google Fonts.
-- **Despliegue gratis en Cloudflare.** `wrangler.jsonc` apunta `assets.directory` a `./dist` (Workers). Pages usa la misma carpeta. Los dos caben en el plan gratuito para un sitio de este tamaño.
+- **Despliegue gratis en Cloudflare.** El repo público es `noumenAETHRON/cgamedia`. `wrangler.jsonc` ejecuta `npm run build` y publica `./dist` (Workers Builds). Si el panel pide carpeta de salida, es `dist`. Node 22. GitHub Actions (`.github/workflows/ci.yml`) corre tests y build en cada push.
 
 ## Mapa de carpetas
 

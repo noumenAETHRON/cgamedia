@@ -1,7 +1,14 @@
 {
+  // Workers Builds (Git): ejecuta el build y publica ./dist como assets estáticos.
+  // En el panel, si pide los campos a mano: build `npm run build`, salida `dist`, Node 22.
   "name": "cgamedia",
   "compatibility_date": "2026-11-25",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "build": {
+    "command": "npm run build"
   }
 }
